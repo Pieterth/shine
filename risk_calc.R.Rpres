@@ -1,0 +1,63 @@
+risk_calc.R
+========================================================
+title: "Risk calculator for heart attack"
+author: "Pieter ten Have"
+date: "April 8, 2017"
+output: "ioslides_presentation"
+
+Simple risk calculator to predict the risk of a heart attack
+========================================================
+
+
+8 April, 2017
+
+
+Goal of the app
+========================================================
+
+This app can be used to calculate the risk of getting a heart attack within 5 years.
+The only input required is:
+1. systolic bloodpressure
+2. number of cigarettes smoked daily.
+
+The calculator will make clear that if you smoke and have a high bloodpressure,
+ quitting smoking is more important than lowering your bloodpressure.
+ 
+_Please note that the output is fictitious._
+
+How to use the app
+========================================================
+
+To use the app, just slide the two sliders to your personal bloodpressure and number of cigarettes smoked daily.
+
+If you don't know your bloodpressure, leave the bloodpressure slider at its default value of 120.
+
+Inside the app
+========================================================
+
+The heart of the app is a sigma function, with form:
+1 / (1 + exp(-z)).
+
+This creates at output between 0 and 1.
+By multiplying with 100, you get a risk between 0 and 100 percent.
+To get a realistic output with realistic thresholds, you have to add some math.
+Th e result is that the output can be negative.
+As a risk can't be negative, I added the function 'max(risk, 0)'
+which makes all output at least 0.
+
+Formula inside the app
+========================================================
+
+This is the formula inside the app.
+
+The default for the bloodpressure (bp) is 120
+and the default for the number of cigarettes (nc) is 0.
+
+
+```{r}
+bp <- 120
+nc <- 0
+z <-  -0.07 * (bp - 160) + -0.25 * nc
+risk <-  max(round(100 * (1/(1 + exp(z))) - 10, 0), 0)
+risk
+```
